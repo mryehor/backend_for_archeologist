@@ -1,67 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CryptoArchaeologist</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background-color: #121212;
-      font-family: 'Arial', sans-serif;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      background: linear-gradient(135deg, #111, #333);
+      color: #eee;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin: 0; padding: 0;
       height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      user-select: none;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    #balance, #pickaxe {
-      margin: 0.3rem 0;
-      font-size: 1.1rem;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px #0f0;
     }
     button {
-      padding: 1rem 2rem;
-      margin-top: 2rem;
+      padding: 15px 40px;
       font-size: 1.5rem;
-      background-color: #2d2d2d;
-      color: white;
+      background: #0f0;
       border: none;
-      border-radius: 15px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background-color 0.2s;
+      color: #111;
+      font-weight: 700;
+      box-shadow: 0 0 20px #0f0;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #3c3c3c;
+      background: #0c0;
     }
   </style>
 </head>
 <body>
   <h1>🪙 CryptoArchaeologist</h1>
-  <div id="balance">Balance: 0 coins</div>
-  <div id="pickaxe">Pickaxe: Wooden</div>
-  <button onclick="enterMine()">🚪 Enter the Mine</button>
-
-  <script>
-    function loadState() {
-      const saved = localStorage.getItem("crypto_state");
-      if (saved) {
-        const data = JSON.parse(saved);
-        document.getElementById("balance").innerText = `Balance: ${data.balance.toFixed(1)} coins`;
-        document.getElementById("pickaxe").innerText = `Pickaxe: ${data.currentPickaxeId}`;
-      }
-    }
-
-    function enterMine() {
-      window.location.href = "/mine";
-    }
-
-    loadState();
-  </script>
+  <button onclick="location.href='mine.html'">⛏️ Start Mining</button>
 </body>
 </html>
