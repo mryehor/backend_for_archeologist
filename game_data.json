@@ -1,0 +1,412 @@
+{
+  "pickaxes": [
+    {
+      "id": "wood",
+      "name": "🫽 Wooden Pickaxe",
+      "speed": 2000,
+      "price": 0,
+      "image": "https://i.imgur.com/wood_pickaxe.png"
+    },
+    {
+      "id": "stone",
+      "name": "🪨 Stone Pickaxe",
+      "speed": 1600,
+      "price": 100,
+      "image": "https://i.imgur.com/stone_pickaxe.png"
+    },
+    {
+      "id": "iron",
+      "name": "⚙️ Iron Pickaxe",
+      "speed": 1200,
+      "price": 300,
+      "image": "https://i.imgur.com/iron_pickaxe.png"
+    },
+    {
+      "id": "gold",
+      "name": "💰 Gold Pickaxe",
+      "speed": 800,
+      "price": 1000,
+      "image": "https://i.imgur.com/gold_pickaxe.png"
+    },
+    {
+      "id": "diamond",
+      "name": "💎 Diamond Pickaxe",
+      "speed": 500,
+      "price": 3000,
+      "image": "https://i.imgur.com/diamond_pickaxe.png"
+    },
+    {
+      "id": "mythic",
+      "name": "🔮 Mythic Pickaxe",
+      "speed": 300,
+      "price": 10000,
+      "image": "https://i.imgur.com/mythic_pickaxe.png"
+    }
+  ],
+  "artifacts": {
+    "common": [
+      {
+        "name": "Old Coin",
+        "value": 10.0,
+        "image": "https://i.imgur.com/old_coin.png"
+      },
+      {
+        "name": "Clay Cup",
+        "value": 10.1,
+        "image": "https://i.imgur.com/clay_cup.png"
+      },
+      {
+        "name": "Arrow Fragment",
+        "value": 10.2,
+        "image": "https://i.imgur.com/arrow_fragment.png"
+      },
+      {
+        "name": "Animal Bone",
+        "value": 10.3,
+        "image": "https://i.imgur.com/animal_bone.png"
+      },
+      {
+        "name": "Stone Tablet",
+        "value": 10.4,
+        "image": "https://i.imgur.com/stone_tablet.png"
+      },
+      {
+        "name": "Clay Mask",
+        "value": 10.5,
+        "image": "https://i.imgur.com/clay_mask.png"
+      },
+      {
+        "name": "Clay Fish",
+        "value": 10.6,
+        "image": "https://i.imgur.com/clay_fish.png"
+      },
+      {
+        "name": "Clay Shard",
+        "value": 10.7,
+        "image": "https://i.imgur.com/clay_shard.png"
+      },
+      {
+        "name": "Pottery Shard",
+        "value": 10.8,
+        "image": "https://i.imgur.com/pottery_shard.png"
+      },
+      {
+        "name": "Sandstone",
+        "value": 10.9,
+        "image": "https://i.imgur.com/sandstone.png"
+      }
+    ],
+    "uncommon": [
+      {
+        "name": "Mirror Shard",
+        "value": 20.5,
+        "image": "https://i.imgur.com/mirror_shard.png"
+      },
+      {
+        "name": "Mosaic Fragment",
+        "value": 21.3,
+        "image": "https://i.imgur.com/mosaic_fragment.png"
+      },
+      {
+        "name": "Carved Stone",
+        "value": 21.8,
+        "image": "https://i.imgur.com/carved_stone.png"
+      },
+      {
+        "name": "Ancient Button",
+        "value": 22.1,
+        "image": "https://i.imgur.com/ancient_button.png"
+      },
+      {
+        "name": "Fabric Remnant",
+        "value": 22.4,
+        "image": "https://i.imgur.com/fabric_remnant.png"
+      },
+      {
+        "name": "Glass Fragment",
+        "value": 22.7,
+        "image": "https://i.imgur.com/glass_fragment.png"
+      },
+      {
+        "name": "Stone Seal",
+        "value": 23.0,
+        "image": "https://i.imgur.com/stone_seal.png"
+      },
+      {
+        "name": "Metal Scrap",
+        "value": 23.4,
+        "image": "https://i.imgur.com/metal_scrap.png"
+      },
+      {
+        "name": "Engraved Bone",
+        "value": 23.8,
+        "image": "https://i.imgur.com/engraved_bone.png"
+      },
+      {
+        "name": "Small Statue",
+        "value": 24.2,
+        "image": "https://i.imgur.com/small_statue.png"
+      }
+    ],
+    "rare": [
+      {
+        "name": "Silver Ring",
+        "value": 50.75,
+        "image": "https://i.imgur.com/silver_ring.png"
+      },
+      {
+        "name": "Golden Brooch",
+        "value": 51.4,
+        "image": "https://i.imgur.com/golden_brooch.png"
+      },
+      {
+        "name": "Ancient Amulet",
+        "value": 52.1,
+        "image": "https://i.imgur.com/ancient_amulet.png"
+      },
+      {
+        "name": "Old Key",
+        "value": 52.6,
+        "image": "https://i.imgur.com/old_key.png"
+      },
+      {
+        "name": "Runestone",
+        "value": 53.0,
+        "image": "https://i.imgur.com/runestone.png"
+      },
+      {
+        "name": "Rare Coin",
+        "value": 53.4,
+        "image": "https://i.imgur.com/rare_coin.png"
+      },
+      {
+        "name": "Decorative Dagger",
+        "value": 53.8,
+        "image": "https://i.imgur.com/decorative_dagger.png"
+      },
+      {
+        "name": "Gold Pendant",
+        "value": 54.1,
+        "image": "https://i.imgur.com/gold_pendant.png"
+      },
+      {
+        "name": "Old Medallion",
+        "value": 54.5,
+        "image": "https://i.imgur.com/old_medallion.png"
+      },
+      {
+        "name": "Gem Necklace",
+        "value": 54.9,
+        "image": "https://i.imgur.com/gem_necklace.png"
+      }
+    ],
+    "superrare": [
+      {
+        "name": "Carved Statue",
+        "value": 80.8,
+        "image": "https://i.imgur.com/carved_statue.png"
+      },
+      {
+        "name": "Stone Head",
+        "value": 81.2,
+        "image": "https://i.imgur.com/stone_head.png"
+      },
+      {
+        "name": "Ancient Fragment",
+        "value": 81.6,
+        "image": "https://i.imgur.com/ancient_fragment.png"
+      },
+      {
+        "name": "Rare Amulet",
+        "value": 82.0,
+        "image": "https://i.imgur.com/rare_amulet.png"
+      },
+      {
+        "name": "Golden Bracelet",
+        "value": 82.4,
+        "image": "https://i.imgur.com/golden_bracelet.png"
+      },
+      {
+        "name": "Old Coin",
+        "value": 82.8,
+        "image": "https://i.imgur.com/old_coin.png"
+      },
+      {
+        "name": "Magic Crystal",
+        "value": 83.1,
+        "image": "https://i.imgur.com/magic_crystal.png"
+      },
+      {
+        "name": "Rare Fragment",
+        "value": 83.5,
+        "image": "https://i.imgur.com/rare_fragment.png"
+      },
+      {
+        "name": "Antique Artifact",
+        "value": 83.9,
+        "image": "https://i.imgur.com/antique_artifact.png"
+      },
+      {
+        "name": "Relic Piece",
+        "value": 84.3,
+        "image": "https://i.imgur.com/relic_piece.png"
+      }
+    ],
+    "epic": [
+      {
+        "name": "Magic Crystal",
+        "value": 120.5,
+        "image": "https://i.imgur.com/magic_crystal.png"
+      },
+      {
+        "name": "Runic Sword",
+        "value": 121.8,
+        "image": "https://i.imgur.com/runic_sword.png"
+      },
+      {
+        "name": "Royal Ring",
+        "value": 122.2,
+        "image": "https://i.imgur.com/royal_ring.png"
+      },
+      {
+        "name": "Antique Cup",
+        "value": 122.6,
+        "image": "https://i.imgur.com/antique_cup.png"
+      },
+      {
+        "name": "Rare Scepter",
+        "value": 123.0,
+        "image": "https://i.imgur.com/rare_scepter.png"
+      },
+      {
+        "name": "Power Artifact",
+        "value": 123.4,
+        "image": "https://i.imgur.com/power_artifact.png"
+      },
+      {
+        "name": "Mythical Talisman",
+        "value": 123.8,
+        "image": "https://i.imgur.com/mythical_talisman.png"
+      },
+      {
+        "name": "Magic Staff",
+        "value": 124.2,
+        "image": "https://i.imgur.com/magic_staff.png"
+      },
+      {
+        "name": "Phoenix Wings",
+        "value": 124.6,
+        "image": "https://i.imgur.com/phoenix_wings.png"
+      },
+      {
+        "name": "Ancient Crown",
+        "value": 125.0,
+        "image": "https://i.imgur.com/ancient_crown.png"
+      }
+    ],
+    "superepic": [
+      {
+        "name": "King's Crown",
+        "value": 160.3,
+        "image": "https://i.imgur.com/kings_crown.png"
+      },
+      {
+        "name": "Scepter of Power",
+        "value": 161.7,
+        "image": "https://i.imgur.com/scepter_of_power.png"
+      },
+      {
+        "name": "Hero's Sword",
+        "value": 162.1,
+        "image": "https://i.imgur.com/heros_sword.png"
+      },
+      {
+        "name": "Legendary Shield",
+        "value": 162.5,
+        "image": "https://i.imgur.com/legendary_shield.png"
+      },
+      {
+        "name": "Cloak of Darkness",
+        "value": 162.9,
+        "image": "https://i.imgur.com/cloak_of_darkness.png"
+      },
+      {
+        "name": "Amulet of Immortality",
+        "value": 163.3,
+        "image": "https://i.imgur.com/amulet_of_immortality.png"
+      },
+      {
+        "name": "Ring of Fate",
+        "value": 163.7,
+        "image": "https://i.imgur.com/ring_of_fate.png"
+      },
+      {
+        "name": "Sphere of Strength",
+        "value": 164.1,
+        "image": "https://i.imgur.com/sphere_of_strength.png"
+      },
+      {
+        "name": "Mirror of Fate",
+        "value": 164.5,
+        "image": "https://i.imgur.com/mirror_of_fate.png"
+      },
+      {
+        "name": "Chalice of Eternity",
+        "value": 164.9,
+        "image": "https://i.imgur.com/chalice_of_eternity.png"
+      }
+    ],
+    "legendary": [
+      {
+        "name": "God's Artifact",
+        "value": 200.9,
+        "image": "https://i.imgur.com/gods_artifact.png"
+      },
+      {
+        "name": "Chalice of Immortality",
+        "value": 201.4,
+        "image": "https://i.imgur.com/chalice_of_immortality.png"
+      },
+      {
+        "name": "Ancient Sword",
+        "value": 201.8,
+        "image": "https://i.imgur.com/ancient_sword.png"
+      },
+      {
+        "name": "Shield of Light",
+        "value": 202.2,
+        "image": "https://i.imgur.com/shield_of_light.png"
+      },
+      {
+        "name": "Book of Wisdom",
+        "value": 202.6,
+        "image": "https://i.imgur.com/book_of_wisdom.png"
+      },
+      {
+        "name": "Crystal of Eternity",
+        "value": 203.0,
+        "image": "https://i.imgur.com/crystal_of_eternity.png"
+      },
+      {
+        "name": "Crown of Immortals",
+        "value": 203.4,
+        "image": "https://i.imgur.com/crown_of_immortals.png"
+      },
+      {
+        "name": "Sphere of Time",
+        "value": 203.8,
+        "image": "https://i.imgur.com/sphere_of_time.png"
+      },
+      {
+        "name": "Staff of Elements",
+        "value": 204.2,
+        "image": "https://i.imgur.com/staff_of_elements.png"
+      },
+      {
+        "name": "Seal of the Gods",
+        "value": 204.6,
+        "image": "https://i.imgur.com/seal_of_the_gods.png"
+      }
+    ]
+  }
+}
