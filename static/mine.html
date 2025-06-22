@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mine</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0d0d0d;
+      font-family: 'Arial', sans-serif;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h2 {
+      margin-bottom: 1rem;
+    }
+    #dig-button {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    #dig-button:hover {
+      background-color: #444;
+    }
+    #result {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .artifact {
+      margin-top: 1rem;
+      width: 180px;
+    }
+    #back {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: transparent;
+      color: white;
+      border: 1px solid white;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button id="back" onclick="goBack()">⬅️ Back</button>
+  <h2>⛏️ Mining Zone</h2>
+  <div id="depth">Depth: 1</div>
+  <button id="dig-button">👊 Hit!</button>
+  <div id="result"></div>
+
+  <script>
+    let artifacts = {};
+    let pickaxes = {};
+    let currentPickaxeId = "wood";
+    let balance = 0;
+    let depth = 1;
+
+    function updateUI() {
+      document.getElementById("depth").innerText = `Depth: ${depth}`;
+    }
+
+    function saveState() {
+      localStorage.setItem("crypto_state", JSON.stringify({ balance, currentPickaxeId, depth }));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem("crypto_state");
+      if (saved) {
+        const data = JSON.parse(saved);
+        balance = data.balance;
+        currentPickaxeId = data.currentPickaxeId;
+        depth = data.depth || 1;
+        updateUI();
+      }
+    }
+
+    async function loadData() {
+      const resArtifacts = await fetch("/artifacts");
+      artifacts = await resArtifacts.json();
+
+      const resPickaxes = await fetch("/pickaxes");
+      const pickaxeList = await resPickaxes.json();
+      pickaxes = {};
+      pickaxeList.forEach(p => pickaxes[p.id] = p);
+    }
+
+    function randomFrom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function getRandomArtifact(depth) {
+      const roll = Math.random();
+      const d = Math.min(depth, 100);
+
+      if (roll < 0.4 - d * 0.002) return randomFrom(artifacts.common);
+      if (roll < 0.6 - d * 0.0015) return randomFrom(artifacts.uncommon);
+      if (roll < 0.75 - d * 0.0012) return randomFrom(artifacts.rare);
+      if (roll < 0.88 - d * 0.0008) return randomFrom(artifacts.superrare);
+      if (roll < 0.96 - d * 0.0005) return randomFrom(artifacts.epic);
+      if (roll < 0.99 - d * 0.0003) return randomFrom(artifacts.superepic);
+      return randomFrom(artifacts.legendary);
+    }
+
+    function dig() {
+      const resultDiv = document.getElementById("result");
+      const pickaxe = pickaxes[currentPickaxeId];
+
+      resultDiv.innerHTML = `⛏️ Mining...`;
+      const digTime = pickaxe.speed + depth * 300;
+
+      setTimeout(() => {
+        const artifact = getRandomArtifact(depth);
+        balance += artifact.value;
+        depth += 1;
+        updateUI();
+        resultDiv.innerHTML = `
+          🎉 You found: <strong>${artifact.name}</strong><br>
+          Value: <strong>${artifact.value.toFixed(1)}</strong> coins<br>
+          <img src="${artifact.image}" class="artifact" alt="artifact">
+        `;
+        saveState();
+      }, digTime);
+    }
+
+    function goBack() {
+      window.location.href = "/";
+    }
+
+    loadState();
+    loadData();
+    document.getElementById("dig-button").addEventListener("click", dig);
+  </script>
+</body>
+</html>

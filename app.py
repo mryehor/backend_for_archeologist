@@ -12,6 +12,10 @@ CORS(app)
 def home():
     return send_from_directory('static', 'index.html')  # Serve the main HTML page
 
+@app.route('/mine')
+def mine():
+    return send_from_directory('static', 'mine.html')
+
 @app.route('/pickaxes')
 def get_pickaxes():
     return jsonify(game_data["pickaxes"])

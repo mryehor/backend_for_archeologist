@@ -1,323 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CryptoArchaeologist</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #111;
-      color: #eee;
-      text-align: center;
-      padding: 2rem;
       margin: 0;
+      padding: 0;
+      background-color: #121212;
+      font-family: 'Arial', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-    #dig-button {
-      font-size: 1.5rem;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    #balance, #pickaxe {
+      margin: 0.3rem 0;
+      font-size: 1.1rem;
+    }
+    button {
       padding: 1rem 2rem;
-      background-color: #2c2c2c;
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      background-color: #2d2d2d;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 15px;
       cursor: pointer;
-      margin-bottom: 2rem;
+      transition: background-color 0.2s;
     }
-    #result {
-      margin-top: 2rem;
-      font-size: 1.2rem;
-      min-height: 250px;
-    }
-    .artifact {
-      margin-top: 1rem;
-      max-width: 200px;
-    }
-    #balance {
-      margin: 1rem 0;
-      font-size: 1.3rem;
-    }
-    #shop {
-      margin-top: 2rem;
-      border: 1px solid #444;
-      padding: 1rem;
-      background: #222;
-      display: inline-block;
-      max-width: 400px;
-      text-align: left;
-    }
-    #shop h2 {
-      margin-top: 0;
-    }
-    .shop-item {
-      padding: 0.4rem;
-      border-bottom: 1px solid #333;
-      cursor: pointer;
-      color: #ccc;
-    }
-    .shop-item:hover {
-      background: #333;
-      color: #fff;
-    }
-    .owned {
-      color: #6f6;
-      cursor: default;
-    }
-    #inventory {
-      margin-top: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-    }
-    #inventory h2 {
-      margin-top: 0;
-    }
-    #inventory ul {
-      list-style: none;
-      padding-left: 0;
-      max-height: 200px;
-      overflow-y: auto;
-      background: #222;
-      border: 1px solid #444;
-      border-radius: 6px;
-    }
-    #inventory ul li {
-      padding: 0.4rem;
-      border-bottom: 1px solid #333;
-      display: flex;
-      justify-content: space-between;
-    }
-    #mine-select {
-      margin-bottom: 1rem;
-    }
-    #mine-select select {
-      font-size: 1.1rem;
-      padding: 0.3rem;
-      background: #222;
-      color: #eee;
-      border: 1px solid #555;
-      border-radius: 5px;
-    }
-    #transition {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: #111;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.7s ease;
-      z-index: 999;
-    }
-    #transition.active {
-      opacity: 1;
-      pointer-events: auto;
+    button:hover {
+      background-color: #3c3c3c;
     }
   </style>
 </head>
 <body>
   <h1>🪙 CryptoArchaeologist</h1>
-
-  <div id="balance">Balance: <span id="balance-amount">0</span> coins</div>
-
-  <div id="mine-select">
-    <label for="mine">Choose Mine:</label>
-    <select id="mine">
-      <option value="1">Mine #1 🌍</option>
-      <option value="2">Mine #2 🌍</option>
-      <option value="3">Mine #3 🌍</option>
-    </select>
-  </div>
-
-  <button id="dig-button">⛏️ Dig</button>
-
-  <div id="result"></div>
-
-  <button id="toggle-shop">🛠️ Pickaxe Shop</button>
-
-  <div id="shop" style="display:none;">
-    <h2>Pickaxe Shop</h2>
-    <div id="shop-items"></div>
-    <button id="close-shop">Close Shop</button>
-  </div>
-
-  <div id="inventory">
-    <h2>Artifact Inventory</h2>
-    <ul id="inventory-list"></ul>
-  </div>
-
-  <div id="transition"></div>
-
-  <audio id="dig-sound" src="https://freesound.org/data/previews/341/341695_5260879-lq.mp3"></audio>
-  <audio id="find-sound" src="https://freesound.org/data/previews/276/276020_5121236-lq.mp3"></audio>
+  <div id="balance">Balance: 0 coins</div>
+  <div id="pickaxe">Pickaxe: Wooden</div>
+  <button onclick="enterMine()">🚪 Enter the Mine</button>
 
   <script>
-    let artifacts = {};
-    let pickaxes = {};
-    let currentPickaxeId = "wood";
-    let balance = 0;
-    let inventory = {};
-    let currentMine = "1";
-
-    async function loadData() {
-      try {
-        const res = await fetch("game_data.json");
-        const json = await res.json();
-        artifacts = json.artifacts;
-        pickaxes = {};
-        json.pickaxes.forEach(p => {
-          pickaxes[p.id] = p;
-        });
-
-        loadState();
-        renderShop();
-        updateBalanceDisplay();
-        updateInventoryDisplay();
-      } catch (e) {
-        console.error("Error loading data:", e);
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem("crypto_balance", balance);
-      localStorage.setItem("crypto_inventory", JSON.stringify(inventory));
-      localStorage.setItem("crypto_pickaxe", currentPickaxeId);
-      localStorage.setItem("crypto_mine", currentMine);
-    }
     function loadState() {
-      const savedBalance = localStorage.getItem("crypto_balance");
-      if (savedBalance) balance = Number(savedBalance);
-      const savedInventory = localStorage.getItem("crypto_inventory");
-      if (savedInventory) inventory = JSON.parse(savedInventory);
-      const savedPickaxe = localStorage.getItem("crypto_pickaxe");
-      if (savedPickaxe && pickaxes[savedPickaxe]) currentPickaxeId = savedPickaxe;
-      const savedMine = localStorage.getItem("crypto_mine");
-      if (savedMine) currentMine = savedMine;
-    }
-
-    function updateBalanceDisplay() {
-      document.getElementById("balance-amount").innerText = balance.toFixed(1);
-    }
-
-    function updateInventoryDisplay() {
-      const ul = document.getElementById("inventory-list");
-      ul.innerHTML = "";
-      for (const [name, count] of Object.entries(inventory)) {
-        const li = document.createElement("li");
-        li.innerText = `${name} ×${count}`;
-        ul.appendChild(li);
+      const saved = localStorage.getItem("crypto_state");
+      if (saved) {
+        const data = JSON.parse(saved);
+        document.getElementById("balance").innerText = `Balance: ${data.balance.toFixed(1)} coins`;
+        document.getElementById("pickaxe").innerText = `Pickaxe: ${data.currentPickaxeId}`;
       }
     }
 
-    function randomFrom(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
-    function getArtifactByChance() {
-      const roll = Math.random() * 100;
-      if (roll < 39.5) return randomFrom(artifacts.common);
-      else if (roll < 64.5) return randomFrom(artifacts.uncommon);
-      else if (roll < 79.5) return randomFrom(artifacts.rare);
-      else if (roll < 87.5) return randomFrom(artifacts.superrare);
-      else if (roll < 93.5) return randomFrom(artifacts.epic);
-      else if (roll < 98.5) return randomFrom(artifacts.superepic);
-      else return randomFrom(artifacts.legendary);
+    function enterMine() {
+      window.location.href = "/mine";
     }
 
-    const digSound = document.getElementById("dig-sound");
-    const findSound = document.getElementById("find-sound");
-
-    async function dig() {
-      const resultDiv = document.getElementById("result");
-      digSound.currentTime = 0;
-      digSound.play();
-
-      resultDiv.innerText = "⛏️ Digging...";
-      disableButtons(true);
-
-      await showTransition();
-
-      await new Promise(res => setTimeout(res, pickaxes[currentPickaxeId].speed));
-
-      const artifact = getArtifactByChance();
-
-      findSound.currentTime = 0;
-      findSound.play();
-
-      balance += artifact.value;
-      inventory[artifact.name] = (inventory[artifact.name] || 0) + 1;
-
-      updateBalanceDisplay();
-      updateInventoryDisplay();
-
-      resultDiv.innerHTML = `🎉 You found: <strong>${artifact.name}</strong><br>Value: <strong>${artifact.value.toFixed(1)}</strong> coins`;
-
-      saveState();
-      disableButtons(false);
-    }
-
-    function disableButtons(disable) {
-      document.getElementById("dig-button").disabled = disable;
-      document.getElementById("toggle-shop").disabled = disable;
-      document.getElementById("mine").disabled = disable;
-    }
-
-    async function showTransition() {
-      const trans = document.getElementById("transition");
-      trans.classList.add("active");
-      await new Promise(res => setTimeout(res, 700));
-      trans.classList.remove("active");
-      await new Promise(res => setTimeout(res, 300));
-    }
-
-    function renderShop() {
-      const shopDiv = document.getElementById("shop-items");
-      shopDiv.innerHTML = "";
-      for (const pId in pickaxes) {
-        const p = pickaxes[pId];
-        const div = document.createElement("div");
-        div.classList.add("shop-item");
-        if (pId === currentPickaxeId) {
-          div.classList.add("owned");
-          div.innerText = `${p.name} (current)`;
-        } else if (p.price > balance) {
-          div.innerText = `${p.name} — price: ${p.price.toFixed(1)} (not enough coins)`;
-          div.style.color = "#666";
-          div.style.cursor = "default";
-        } else {
-          div.innerText = `${p.name} — price: ${p.price.toFixed(1)}`;
-          div.onclick = () => buyPickaxe(pId);
-        }
-        shopDiv.appendChild(div);
-      }
-    }
-
-    function buyPickaxe(id) {
-      const p = pickaxes[id];
-      if (balance >= p.price) {
-        balance -= p.price;
-        currentPickaxeId = id;
-        alert(`You bought ${p.name}!`);
-        saveState();
-        updateBalanceDisplay();
-        renderShop();
-      } else {
-        alert("Not enough coins to buy this pickaxe.");
-      }
-    }
-
-    document.getElementById("dig-button").addEventListener("click", dig);
-    document.getElementById("toggle-shop").addEventListener("click", () => {
-      const shop = document.getElementById("shop");
-      shop.style.display = shop.style.display === "none" ? "block" : "none";
-    });
-    document.getElementById("close-shop").addEventListener("click", () => {
-      document.getElementById("shop").style.display = "none";
-    });
-
-    document.getElementById("mine").addEventListener("change", e => {
-      currentMine = e.target.value;
-      saveState();
-    });
-
-    loadData();
+    loadState();
   </script>
 </body>
 </html>
