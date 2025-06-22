@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CryptoArchaeologist</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 100px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #00aaff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>CryptoArchaeologist</h1>
+    <p>Готов копать сокровища?</p>
+    <button onclick="startDigging()">⛏️ Копать</button>
+
+    <script>
+        function startDigging() {
+            fetch("/dig")
+                .then(response => response.json())
+                .then(data => {
+                    alert("Ты нашёл: " + data.result);
+                });
+        }
+    </script>
+</body>
+</html>
