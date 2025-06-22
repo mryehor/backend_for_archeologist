@@ -1,40 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CryptoArchaeologist</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: white;
-            font-family: sans-serif;
-            text-align: center;
-            padding-top: 100px;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 20px;
-            background-color: #00aaff;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>CryptoArchaeologist</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      text-align: center;
+      font-family: sans-serif;
+      padding: 40px;
+    }
+    #miner {
+      width: 150px;
+      margin: 30px auto;
+    }
+    #digButton {
+      font-size: 24px;
+      padding: 15px 40px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 25px;
+      font-size: 22px;
+      color: #ffdf00;
+    }
+    #progress {
+      width: 300px;
+      height: 20px;
+      background-color: #444;
+      border-radius: 10px;
+      margin: 20px auto;
+    }
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      background-color: #00ffcc;
+      border-radius: 10px;
+    }
+    #score {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #aaa;
+    }
+  </style>
 </head>
 <body>
-    <h1>CryptoArchaeologist</h1>
-    <p>Готов копать сокровища?</p>
-    <button onclick="startDigging()">⛏️ Копать</button>
+  <h1>CryptoArchaeologist</h1>
+  <p>Кликай, чтобы копать и находить артефакты!</p>
 
-    <script>
-        function startDigging() {
-            fetch("/dig")
-                .then(response => response.json())
-                .then(data => {
-                    alert("Ты нашёл: " + data.result);
-                });
-        }
-    </script>
+  <img id="miner" src="https://i.gifer.com/1am7.gif" alt="Miner">
+
+  <div id="progress">
+    <div id="progressBar"></div>
+  </div>
+
+  <button id="digButton" onclick="dig()">⛏️ Копать</button>
+  <div id="result"></div>
+  <div id="score">Счёт: 0</div>
+
+  <script>
+    let score = parseInt(localStorage.getItem('archaeo_score')) || 0;
+    let clicks = 0;
+    const clicksToFind = 10;  // Сколько кликов нужно для находки
+
+    const resultEl = document.getElementById("result");
+    const scoreEl = document.getElementById("score");
+    const progressBar = document.getElementById("progressBar");
+
+    scoreEl.textContent = `Счёт: ${score}`;
+
+    function dig() {
+      clicks++;
+      let percent = (clicks / clicksToFind) * 100;
+      progressBar.style.width = `${percent}%`;
+
+      if (clicks >= clicksToFind) {
+        clicks = 0;
+        progressBar.style.width = '0%';
+        resultEl.textContent = "Ищем артефакт...";
+        fetch('/dig')
+          .then(res => res.json())
+          .then(data => {
+            resultEl.textContent = `🧿 Найдено: ${data.result}`;
+            score++;
+            localStorage.setItem('archaeo_score', score);
+            scoreEl.textContent = `Счёт: ${score}`;
+          });
+      }
+    }
+  </script>
 </body>
 </html>
