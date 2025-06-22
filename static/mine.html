@@ -1,378 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CryptoArchaeologist - Mine</title>
-  <style>
-    body, html {
-      margin: 0; padding: 0; height: 100%; overflow: hidden;
-      background: #1a1a1a;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #eee;
-      user-select: none;
-    }
-    #game-container {
-      position: relative;
-      width: 100vw; height: 100vh;
-      background: linear-gradient(to bottom, #2f2f2f 0%, #111 70%);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    #canvas {
-      background: #222;
-      border: 3px solid #555;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #0f0;
-      max-width: 90vw;
-      max-height: 70vh;
-    }
-    #ui {
-      margin-top: 15px;
-      text-align: center;
-      width: 90vw;
-      max-width: 800px;
-    }
-    #depth, #balance, #pickaxeName {
-      font-weight: bold;
-      font-size: 1.3rem;
-      margin: 5px 10px;
-      display: inline-block;
-      min-width: 120px;
-    }
-    #artifact-popup {
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.85);
-      border: 2px solid #0f0;
-      border-radius: 12px;
-      padding: 20px;
-      max-width: 350px;
-      color: #0f0;
-      font-weight: 700;
-      box-shadow: 0 0 15px #0f0;
-      display: none;
-      z-index: 10;
-    }
-    #artifact-popup img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    #exit-btn {
-      margin-top: 25px;
-      background: #0f0;
-      border: none;
-      color: #111;
-      font-weight: 700;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: background-color 0.3s ease;
-    }
-    #exit-btn:hover {
-      background: #0c0;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title>CryptoArchaeologist - Mobile Mine</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: linear-gradient(135deg, #2e2b27, #1b1916);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+  #mine {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: #3a362f url('https://i.imgur.com/MC97U6J.jpg') center bottom / cover no-repeat;
+    touch-action: manipulation;
+  }
+  #walls {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 80%;
+    background: url('https://i.imgur.com/3D3FvYV.jpg') center center / cover no-repeat;
+    filter: brightness(0.7);
+    z-index: 1;
+  }
+  #floor {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 20%;
+    background: url('https://i.imgur.com/8n8tBvD.jpg') center center / cover no-repeat;
+    filter: brightness(0.6);
+    z-index: 2;
+  }
+  #pickaxe {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    background: url('https://i.imgur.com/ot9u1uI.png') center center / contain no-repeat;
+    transform-origin: 20% 80%;
+    z-index: 3;
+    will-change: transform;
+  }
+  #artifact {
+    position: absolute;
+    bottom: 45%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    z-index: 4;
+  }
+  #artifact-name {
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
+    color: #ccf;
+    font-weight: 600;
+    text-shadow: 0 0 4px #000;
+    transform: translateX(-50%);
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+  }
+  #exit-btn {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    padding: 12px 18px;
+    background: #444;
+    color: #eee;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #222 inset;
+    user-select: none;
+    z-index: 10;
+  }
+  #exit-btn:active {
+    background: #666;
+  }
+</style>
 </head>
 <body>
-  <div id="game-container">
-    <canvas id="canvas" width="800" height="450"></canvas>
-    <div id="ui">
-      <span id="depth">Depth: 0</span>
-      <span id="balance">Balance: 0</span>
-      <span id="pickaxeName">Pickaxe: </span>
-      <br />
-      <button id="exit-btn">Exit to Menu</button>
-    </div>
-    <div id="artifact-popup"></div>
+  <div id="mine">
+    <div id="walls"></div>
+    <div id="floor"></div>
+    <div id="pickaxe"></div>
+    <div id="artifact"></div>
+    <div id="artifact-name"></div>
+    <button id="exit-btn">Exit to Menu</button>
   </div>
 
-  <script>
-    (() => {
-      const canvas = document.getElementById('canvas');
-      const ctx = canvas.getContext('2d');
+<script>
+  const pickaxe = document.getElementById('pickaxe');
+  const artifact = document.getElementById('artifact');
+  const artifactName = document.getElementById('artifact-name');
+  const exitBtn = document.getElementById('exit-btn');
 
-      const depthEl = document.getElementById('depth');
-      const balanceEl = document.getElementById('balance');
-      const pickaxeNameEl = document.getElementById('pickaxeName');
-      const artifactPopup = document.getElementById('artifact-popup');
-      const exitBtn = document.getElementById('exit-btn');
+  let artifactsList = [];
 
-      let pickaxes = [];
-      let artifacts = [];
+  // Загружаем артефакты с сервера
+  async function loadArtifacts() {
+    try {
+      const res = await fetch('/artifacts');
+      const data = await res.json();
+      // Объединяем все уровни артефактов в один массив
+      artifactsList = [
+        ...data.common,
+        ...data.uncommon,
+        ...data.rare,
+        ...data.superrare,
+        ...data.epic,
+        ...data.superepic,
+        ...data.legendary
+      ];
+      // Для артефактов без картинок добавим плейсхолдер
+      artifactsList = artifactsList.map(a => ({
+        name: a.name,
+        image: a.image || 'https://via.placeholder.com/60?text=?',
+        value: a.value || 0
+      }));
+    } catch (e) {
+      console.error('Failed to load artifacts', e);
+    }
+  }
 
-      let gameState = {
-        depth: 0,
-        balance: 0,
-        currentPickaxeId: 'wood'
-      };
+  let swinging = false;
 
-      // Load saved state from localStorage
-      function loadState() {
-        const saved = localStorage.getItem('cryptoarchaeologist_state');
-        if (saved) {
-          try {
-            const obj = JSON.parse(saved);
-            if (obj.depth !== undefined) gameState.depth = obj.depth;
-            if (obj.balance !== undefined) gameState.balance = obj.balance;
-            if (obj.currentPickaxeId !== undefined) gameState.currentPickaxeId = obj.currentPickaxeId;
-          } catch {}
-        }
-      }
+  function swingPickaxe() {
+    if (swinging) return;
+    swinging = true;
 
-      // Save current state
-      function saveState() {
-        localStorage.setItem('cryptoarchaeologist_state', JSON.stringify(gameState));
-      }
+    // Анимация взмаха кирки
+    pickaxe.style.transition = "transform 0.25s ease-in-out";
+    pickaxe.style.transform = "rotate(45deg)";
+    setTimeout(() => {
+      pickaxe.style.transform = "rotate(0deg)";
+    }, 250);
 
-      // Load game data from JSON
-      async function loadGameData() {
-        try {
-          const res = await fetch('game_data.json');
-          const data = await res.json();
-          pickaxes = data.pickaxes;
+    // Показать случайный артефакт
+    if (artifactsList.length === 0) {
+      swinging = false;
+      return;
+    }
 
-          artifacts = [];
-          const tiers = ["common", "uncommon", "rare", "superrare", "epic", "superepic", "legendary"];
-          tiers.forEach((tierName, tierIndex) => {
-            if (data.artifacts[tierName]) {
-              data.artifacts[tierName].forEach(artifact => {
-                artifacts.push({...artifact, tier: tierIndex});
-              });
-            }
-          });
-        } catch (e) {
-          console.error("Failed to load game_data.json:", e);
-          alert("Error loading game data.");
-        }
-      }
+    const found = artifactsList[Math.floor(Math.random() * artifactsList.length)];
 
-      // Get current pickaxe speed
-      function getPickaxeSpeed() {
-        const pk = pickaxes.find(p => p.id === gameState.currentPickaxeId);
-        return pk ? pk.speed : 2000;
-      }
+    artifact.style.backgroundImage = `url(${found.image})`;
+    artifactName.textContent = found.name;
+    artifact.style.opacity = "1";
+    artifactName.style.opacity = "1";
 
-      // Chance calculation to get artifact depending on depth and tier
-      // The deeper, the higher the chance for better tiers
-      function getRandomArtifact(depth) {
-        // Calculate tier probabilities based on depth:
-        // e.g. depth 0-10: mostly common, depth 10-30: more rare, etc.
-        // We'll define base chances for each tier:
-        const baseChances = [0.4, 0.2, 0.15, 0.1, 0.07, 0.05, 0.03]; 
-        // Boost chances proportional to depth (max depth say 100)
-        const depthFactor = Math.min(depth / 100, 1);
+    // Скрыть артефакт и название через 1.5 секунды
+    setTimeout(() => {
+      artifact.style.opacity = "0";
+      artifactName.style.opacity = "0";
+      swinging = false;
+    }, 1500);
+  }
 
-        // Adjust chances linearly by depthFactor:
-        // For example, increase chance of higher tiers with depthFactor
-        let adjustedChances = baseChances.map((chance, i) => {
-          // Low tiers lose some chance, high tiers gain chance
-          if (i < baseChances.length - 1) {
-            return chance * (1 - depthFactor * 0.7);
-          } else {
-            return chance + (depthFactor * 0.7); // legendary tier boost
-          }
-        });
+  // Обработчик клика по шахте (не мешаем кнопке выхода)
+  document.getElementById('mine').addEventListener('click', e => {
+    if (e.target === exitBtn) return;
+    swingPickaxe();
+  });
 
-        // Normalize so sum = 1
-        const total = adjustedChances.reduce((a,b)=>a+b,0);
-        adjustedChances = adjustedChances.map(c=>c/total);
+  exitBtn.addEventListener('click', () => {
+    window.location.href = '/'; // Возврат на главную
+  });
 
-        // Choose tier according to adjustedChances
-        const r = Math.random();
-        let sum = 0;
-        let chosenTier = 0;
-        for (let i = 0; i < adjustedChances.length; i++) {
-          sum += adjustedChances[i];
-          if (r <= sum) {
-            chosenTier = i;
-            break;
-          }
-        }
-
-        // Filter artifacts of chosen tier
-        const tierArtifacts = artifacts.filter(a => a.tier === chosenTier);
-        if (tierArtifacts.length === 0) return null;
-
-        // Return random artifact from that tier
-        return tierArtifacts[Math.floor(Math.random() * tierArtifacts.length)];
-      }
-
-      // Show artifact popup
-      function showArtifact(artifact) {
-        if (!artifact) return;
-        artifactPopup.style.display = 'block';
-        artifactPopup.innerHTML = `
-          🎉 You found: <strong>${artifact.name}</strong> <br/>
-          <img src="${artifact.image}" alt="${artifact.name}" />
-          <br/>Value: ${artifact.value.toFixed(2)}
-        `;
-        setTimeout(() => {
-          artifactPopup.style.display = 'none';
-        }, 3000);
-      }
-
-      // Canvas drawing setup
-      let pickaxeAngle = 0;
-      let swinging = false;
-      let swingSpeed = 0;
-      let cooldown = 0;
-      let lastSwingTime = 0;
-
-      function drawMineBackground() {
-        // Simple layered dirt and rocks effect
-        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        grad.addColorStop(0, '#654321');
-        grad.addColorStop(1, '#2f1e0c');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Draw some rocks
-        for (let i = 0; i < 15; i++) {
-          ctx.fillStyle = '#3d2e1f';
-          const x = (i * 50 + (Date.now() % 50)) % canvas.width;
-          const y = 50 + (i * 20) % (canvas.height - 100);
-          ctx.beginPath();
-          ctx.ellipse(x, y, 15, 10, 0, 0, 2 * Math.PI);
-          ctx.fill();
-        }
-      }
-
-      function drawPickaxe() {
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 1.3;
-
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(pickaxeAngle);
-
-        // Draw pickaxe handle
-        ctx.fillStyle = '#8b5a2b';
-        ctx.fillRect(-5, 0, 10, 100);
-
-        // Draw pickaxe head
-        ctx.fillStyle = '#999';
-        ctx.beginPath();
-        ctx.moveTo(-20, 0);
-        ctx.lineTo(20, 0);
-        ctx.lineTo(15, -40);
-        ctx.lineTo(-15, -40);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.restore();
-      }
-
-      // Animation loop with swing
-      function animate(timestamp) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        drawMineBackground();
-        drawPickaxe();
-
-        if (swinging) {
-          const speedPerFrame = 0.25;
-          pickaxeAngle += swingSpeed * speedPerFrame;
-
-          if (pickaxeAngle > 0.6) {
-            swingSpeed = -1;
-            playSound(swingSoundBuffer);
-          }
-          if (pickaxeAngle < -0.3) {
-            swinging = false;
-            pickaxeAngle = 0;
-            cooldown = getPickaxeSpeed();
-            lastSwingTime = timestamp;
-
-            // Play artifact sound if cooldown done
-            if (timestamp - lastArtifactTime > artifactSoundCooldown) {
-              playSound(artifactSoundBuffer);
-              lastArtifactTime = timestamp;
-            }
-          }
-        } else {
-          if (cooldown > 0) {
-            cooldown -= timestamp - lastSwingTime;
-            lastSwingTime = timestamp;
-          }
-        }
-
-        requestAnimationFrame(animate);
-      }
-
-      // Play sounds
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      let swingSoundBuffer = null;
-      let artifactSoundBuffer = null;
-      let lastArtifactTime = 0;
-      const artifactSoundCooldown = 1000; // ms
-
-      function loadSound(url, callback) {
-        fetch(url)
-          .then(r => r.arrayBuffer())
-          .then(buffer => audioContext.decodeAudioData(buffer))
-          .then(decoded => callback(decoded));
-      }
-
-      function playSound(buffer) {
-        if (!buffer) return;
-        const source = audioContext.createBufferSource();
-        source.buffer = buffer;
-        source.connect(audioContext.destination);
-        source.start(0);
-      }
-
-      loadSound('https://actions.google.com/sounds/v1/impacts/wood_plank_flicks.ogg', buf => swingSoundBuffer = buf);
-      loadSound('https://actions.google.com/sounds/v1/cartoon/pop.ogg', buf => artifactSoundBuffer = buf);
-
-      // User click/tap handler
-      function onDig() {
-        if (cooldown > 0 || swinging) return;
-
-        swinging = true;
-        swingSpeed = 1;
-
-        gameState.depth++;
-        const artifact = getRandomArtifact(gameState.depth);
-
-        if (artifact) {
-          const gained = artifact.value * (0.8 + Math.random() * 0.4);
-          gameState.balance += gained;
-          showArtifact(artifact);
-        }
-
-        updateUI();
-        saveState();
-      }
-
-      function updateUI() {
-        depthEl.textContent = `Depth: ${gameState.depth}`;
-        balanceEl.textContent = `Balance: ${gameState.balance.toFixed(1)}`;
-        const pk = pickaxes.find(p => p.id === gameState.currentPickaxeId);
-        pickaxeNameEl.textContent = `Pickaxe: ${pk ? pk.name : "Wooden"}`;
-      }
-
-      canvas.addEventListener('click', onDig);
-      canvas.addEventListener('touchstart', onDig);
-
-      exitBtn.addEventListener('click', () => {
-        saveState();
-        window.location.href = "index.html";
-      });
-
-      // Init
-      async function init() {
-        await loadGameData();
-        loadState();
-        updateUI();
-        requestAnimationFrame(animate);
-      }
-      init();
-
-    })();
-  </script>
+  loadArtifacts();
+</script>
 </body>
 </html>
